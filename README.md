@@ -366,7 +366,7 @@ Das Projekt demonstriert zentrale Entwicklungsaufgaben aus dem Bereich ADAS und 
 - reproduzierbare Tests
 - Vorbereitung für Embedded-AI-Deployment
 
-### Kurzbeschreibung für ein Vorstellungsgespräch
+### Kurzbeschreibung 
 
 > I developed a modular ADAS vision pipeline in Python and OpenCV. The current system detects lane boundaries, estimates the lateral vehicle offset, tracks supplied object detections, estimates object distance, calculates time-to-collision, and assigns safety risk levels. I structured the software so that deep-learning models, ROS2, and TensorRT deployment can be integrated in later development stages.
 
