@@ -36,7 +36,7 @@ Ein besonderer Anwendungsfall ist die Sicherheitsbewertung vulnerabler Verkehrst
 
 Die mitgelieferte Demo simuliert einen Rollstuhlfahrer innerhalb der Fahrspur. Die Pipeline berechnet Fahrspurstatus, Objektentfernung, Time-to-Collision und Risikostufe und speichert das visualisierte Ergebnis als `demo_output.jpg`.
 
-Beispielausgabe:
+Ausgabe:
 
 ```text
 lane_status=SAFE
@@ -295,24 +295,6 @@ docker run --rm openadas-vision-stack
 Hinweis: Die Demo erzeugt innerhalb des Containers eine Bilddatei. Für den Zugriff auf die Ausgabe sollte ein lokaler Ordner als Volume eingebunden werden.
 
 ---
-
-## Validierungsstatus und Grenzen
-
-Dieses Projekt ist ein **Portfolio- und Forschungsprototyp**, kein zertifiziertes Fahrerassistenzsystem.
-
-Aktuelle Grenzen:
-
-- keine automatische Deep-Learning-Objektdetektion in der Baseline
-- keine kamerakalibrierte metrische Tiefenmessung
-- keine Berücksichtigung der tatsächlichen Frame-Zeit in der aktuellen Tracking-Baseline
-- begrenzte Robustheit bei Schatten, Baustellen, Regen und fehlenden Markierungen
-- keine Sensorfusion mit Radar oder LiDAR
-- keine Fahrzeugansteuerung
-- keine physische Validierung auf NVIDIA Jetson
-- keine sicherheitskritische Freigabe oder ISO-26262-Qualifizierung
-
-> **Nicht für den Einsatz in realen Fahrzeugsteuerungen bestimmt.**
-
 ---
 
 ## Roadmap
