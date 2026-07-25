@@ -1,0 +1,15 @@
+camera:
+  focal_length_px: 900.0
+lane:
+  roi_top_ratio: 0.60
+  canny_low: 70
+  canny_high: 160
+  hough_threshold: 35
+  min_line_length: 35
+  max_line_gap: 70
+  lane_width_m: 3.5
+risk:
+  caution_ttc_s: 6.0
+  warning_ttc_s: 4.0
+  critical_ttc_s: 2.5
+  critical_distance_m: 7.0
