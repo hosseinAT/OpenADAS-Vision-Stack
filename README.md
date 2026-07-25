@@ -189,8 +189,6 @@ demo_output.jpg
 python -m examples.run_video --input input.mp4 --output output.mp4
 ```
 
-Die aktuelle Videopipeline führt die Fahrspurerkennung aus. Eine automatische Deep-Learning-Objektdetektion für reale Videos ist noch nicht integriert.
-
 ---
 
 ## Konfiguration
