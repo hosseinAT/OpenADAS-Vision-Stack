@@ -1,126 +1,195 @@
 <div align="center">
 
-# OpenADAS Vision Stack
+# OpenADAS Vision Stack · CognitiveDrive AI
 
-### Modulare Computer-Vision- und Sicherheits-Pipeline für Fahrerassistenz und autonomes Fahren
+### Trustworthy Perception, Cognitive Memory & Continual Learning for Autonomous-Driving Research
 
 [![Tests](https://github.com/hosseinAT/OpenADAS-Vision-Stack/actions/workflows/tests.yml/badge.svg)](https://github.com/hosseinAT/OpenADAS-Vision-Stack/actions/workflows/tests.yml)
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)
 ![OpenCV](https://img.shields.io/badge/OpenCV-4.8%2B-5C3EE8?logo=opencv&logoColor=white)
-![Status](https://img.shields.io/badge/Status-Prototype-orange)
+![Status](https://img.shields.io/badge/Status-Research%20Prototype-orange)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-**Fahrspurerkennung · Objekt-Tracking · Distanzschätzung · Time-to-Collision · Risikobewertung**
+**Perception · Tracking · Uncertainty · Unknown Detection · AI Judge · Risk · Episodic Memory · Auto-Labeling · Continual Learning · Shadow Mode**
 
 </div>
 
 ---
 
-## Überblick
+## Why this project exists
 
-**OpenADAS Vision Stack** ist ein eigenständig aufgebauter ADAS-Demonstrator für die kamerabasierte Analyse von Verkehrsszenen. Das Projekt verbindet klassische Bildverarbeitung, Fahrspurgeometrie, Objektverfolgung und eine vereinfachte Sicherheitsbewertung in einer modularen Python-Pipeline.
+Modern autonomous-driving perception is not only an object-detection problem. A trustworthy system must also answer:
 
-Der aktuelle Entwicklungsstand verarbeitet synthetische Bilder sowie aufgezeichnete Videos. Er erkennt Fahrspurmarkierungen, bestimmt die Position des Fahrzeugs relativ zur Fahrspurmitte, verfolgt vorgegebene Objektdetektionen über mehrere Frames, schätzt deren Entfernung und bewertet das Kollisionsrisiko.
+- **How certain am I?**
+- **What if the object is outside my known classes?**
+- **Which sensor/model should I trust under current conditions?**
+- **Have I experienced a similar situation before?**
+- **Can I learn from new observations without destroying old capabilities?**
+- **How can a new model be validated before it is allowed to replace the active model?**
 
-Ein besonderer Anwendungsfall ist die Sicherheitsbewertung vulnerabler Verkehrsteilnehmer, beispielsweise von Fußgängern und Rollstuhlfahrern.
+This repository develops these questions as one modular research platform.
 
-> **Projektstatus:** funktionsfähiger PC-basierter Prototyp. Eine physische Validierung auf NVIDIA Jetson, TensorRT-Inferenz, ROS2-Integration und Tests mit einer echten Fahrzeugkamera sind in der Roadmap enthalten, aber noch nicht abgeschlossen.
+The original OpenADAS baseline already implements classical lane analysis, tracking, approximate distance/TTC and risk visualization. **CognitiveDrive AI** extends that foundation toward uncertainty-aware perception, multi-evidence judging, episodic memory, gated auto-labeling and controlled model evolution.
 
----
-
-## Demo
-
-<p align="center">
-  <img src="docs/assets/demo_output.jpg" alt="OpenADAS Demoausgabe" width="900">
-</p>
-
-Die mitgelieferte Demo simuliert einen Rollstuhlfahrer innerhalb der Fahrspur. Die Pipeline berechnet Fahrspurstatus, Objektentfernung, Time-to-Collision und Risikostufe und speichert das visualisierte Ergebnis als `demo_output.jpg`.
-
-Ausgabe:
-
-```text
-lane_status=SAFE
-object=wheelchair_user, distance_m=5.40, ttc_s=4.00, risk=CRITICAL
-Gespeichert: demo_output.jpg
-```
+> **Important:** this is a research/portfolio demonstrator. The decision outputs are advisory and are **not** a certified autonomous-driving control system for public-road actuation.
 
 ---
 
-## Kernfunktionen
+## Current engineering status
 
-| Modul | Funktion | Aktueller Stand |
+| Capability | Status | Evidence |
 |---|---|---|
-| **Fahrspurerkennung** | Erkennung linker und rechter Fahrspurmarkierungen mit Canny und Hough-Transformation | Implementiert |
-| **Fahrspurgeometrie** | Fahrspurmitte, seitliche Abweichung und Spurstatus | Implementiert |
-| **Objekt-Tracking** | Zuordnung gleichartiger Objekte über Bounding-Box-Zentren | Implementiert |
-| **Distanzschätzung** | Monokulare geometrische Näherung über Objektbreite und Kamerabrennweite | Implementiert |
-| **Time-to-Collision** | TTC aus Entfernung und relativer Distanzänderung | Implementiert als Prototyp |
-| **Risikobewertung** | `SAFE`, `CAUTION`, `WARNING`, `CRITICAL` | Implementiert |
-| **Visualisierung** | Fahrspuren, Objekt-ID, Entfernung, TTC und Risikostufe | Implementiert |
-| **Videoverarbeitung** | Verarbeitung und Speicherung aufgezeichneter MP4-Videos | Implementiert |
-| **Automatisierte Tests** | Tests für Fahrspur-, Distanz-, Tracking- und Risikomodule | 6 Tests |
-| **Deep Learning / YOLO** | Reale Objektdetektion aus Kamerabildern | Geplant |
-| **ONNX / TensorRT** | GPU-optimierte Inferenz | Geplant |
-| **NVIDIA Jetson** | Deployment und Benchmark | Noch nicht validiert |
-| **ROS2 / CARLA** | Middleware- und Simulationsintegration | Geplant |
+| Classical lane detection | ✅ Implemented | `openadas/lanes.py` |
+| Lane geometry / lateral offset | ✅ Implemented | existing pipeline + tests |
+| Object tracking baseline | ✅ Implemented | `openadas/tracking.py` |
+| Approximate distance + TTC | ✅ Implemented | `openadas/distance.py` |
+| Risk levels / visualization | ✅ Implemented | `openadas/risk.py`, `openadas/visualization.py` |
+| CI / automated tests | ✅ Implemented | `.github/workflows/`, `tests/` |
+| Transparent uncertainty baseline | ✅ Implemented | `openadas/cognitive/uncertainty.py` |
+| Dynamic-trust multi-model judge | ✅ Implemented | `openadas/cognitive/judge.py` |
+| Advisory cognitive decision layer | ✅ Implemented | `openadas/cognitive/decision.py` |
+| Episodic similarity memory baseline | ✅ Implemented | `openadas/cognitive/memory.py` |
+| Gated pseudo-label acceptance | ✅ Implemented | `openadas/cognitive/autolabel.py` |
+| Candidate model promotion gate | ✅ Implemented | `openadas/cognitive/lifecycle.py` |
+| Cognitive unit tests | ✅ Implemented | `tests/test_cognitive.py` |
+| Synthetic end-to-end cognitive demo | ✅ Implemented | `examples/cognitive_demo.py` |
+| RealSense RGB-D integration | 🟡 Next milestone | build guide |
+| YOLO / custom wheelchair detector | 🟡 Planned integration | roadmap |
+| ByteTrack / BoT-SORT | 🟡 Planned | roadmap |
+| Persistent FAISS memory | 🟡 Planned | architecture |
+| Continual-learning trainer | 🟡 Planned | architecture |
+| CARLA scenario validation | 🟡 Planned | roadmap |
+| ROS2 sensor graph | 🟡 Planned | roadmap |
+| ONNX / TensorRT / Jetson Orin | 🟡 Planned | roadmap |
+| LiDAR / radar fusion | 🔵 Later hardware phase | roadmap |
+
+This table intentionally separates **implemented code** from **planned research work**.
 
 ---
 
-## Systemarchitektur
+## CognitiveDrive architecture
 
 ```mermaid
 flowchart LR
-    A[Bild oder Video] --> B[Vorverarbeitung]
-    B --> C[Fahrspurerkennung]
-    B --> D[Objektdetektionen]
-    C --> E[Fahrspurgeometrie]
-    D --> F[Objekt-Tracking]
-    F --> G[Distanzschätzung]
-    G --> H[Time-to-Collision]
-    E --> I[Szenenmodell]
-    H --> I
-    I --> J[Risikobewertung]
-    J --> K[Dashboard und Ergebnisvideo]
+    S[Camera / Depth / future LiDAR + Radar] --> F[Sensor health + fusion]
+    F --> P[Detection + tracking]
+    P --> U[Uncertainty + unknown handling]
+    U --> J[Multi-model AI Judge]
+    J --> R[Risk + advisory action]
+    J --> M[Episodic memory]
+    M --> AL[Auto-label gate]
+    AL --> CL[Continual-learning candidate]
+    CL --> V[Offline validation]
+    V --> SH[Shadow mode]
+    SH --> G{Promotion gate}
+    G -->|pass| A[Active model]
+    G -->|fail| X[Reject / rollback]
+    A --> P
+    M --> J
 ```
 
-### Verarbeitungskette
+Full design: **[CognitiveDrive Architecture](docs/COGNITIVEDRIVE_ARCHITECTURE.md)**
 
-1. Das Eingabebild wird in Graustufen umgewandelt, geglättet und mit Canny gefiltert.
-2. Eine trapezförmige Region of Interest begrenzt die Analyse auf den Straßenbereich.
-3. Hough-Linien werden nach Steigung und Bildposition in linke und rechte Fahrspuren getrennt.
-4. Aus beiden Fahrspuren werden Fahrspurmitte und seitliche Abweichung berechnet.
-5. Objektdetektionen werden über einen einfachen Centroid-Tracker mehreren Frames zugeordnet.
-6. Die Distanz wird geometrisch aus Bounding-Box-Breite, angenommener Objektbreite und Brennweite geschätzt.
-7. Aus Distanzänderung und TTC wird eine Risikostufe abgeleitet.
-8. Alle Ergebnisse werden in einem gemeinsamen Dashboard visualisiert.
+Step-by-step implementation plan: **[Build From Zero to Demonstrator](docs/COGNITIVEDRIVE_BUILD_FROM_ZERO.md)**
 
 ---
 
-## Repository-Struktur
+## Core research idea
+
+### 1. Observe
+
+Use synchronized perception signals to create a tracked representation of the environment.
+
+### 2. Estimate uncertainty
+
+Do not treat detector confidence as truth. Track temporal class changes, confidence variation, sensor health and later ensemble disagreement.
+
+### 3. Handle unknowns explicitly
+
+Instead of forcing every object into a known class, allow safe hierarchical fallback labels:
+
+```text
+unknown_object
+unknown_wheeled_object
+unknown_mobility_device
+vulnerable_road_user
+```
+
+### 4. Judge multiple evidence sources
+
+Each source contributes a proposal and a **dynamic trust score**. A degraded camera should count less than a healthy complementary sensor/model.
+
+### 5. Make an explainable safety recommendation
+
+Prototype outputs:
+
+```text
+CONTINUE
+SLOW_DOWN
+PREPARE_TO_STOP
+STOP_REQUEST
+```
+
+Every output includes a reason and risk score.
+
+### 6. Store important experiences
+
+Significant situations become episodes with an embedding, semantic/safety labels, uncertainty, action and outcome.
+
+### 7. Retrieve similar past situations
+
+The cognitive layer can find previous episodes that resemble the current observation and use them as additional evidence.
+
+### 8. Auto-label conservatively
+
+Pseudo-labels are accepted only after explicit gates such as track length, confidence, temporal consistency and multi-model agreement.
+
+### 9. Train a candidate — never overwrite the active model
+
+```text
+model_v1_active
+model_v2_candidate
+```
+
+### 10. Validate before promotion
+
+The candidate must pass old-class regression, new-class improvement, calibration, latency and shadow-mode gates. Failed candidates are rejected; the previous active version remains available for rollback.
+
+---
+
+## Repository structure
 
 ```text
 OpenADAS-Vision-Stack/
-├── .github/workflows/       # Continuous Integration
-├── config/
-│   └── default.yaml         # Kamera-, Fahrspur- und Risikoparameter
+├── .github/workflows/          # CI
+├── config/                     # runtime parameters
 ├── docs/
-│   ├── assets/              # Demoabbildungen
-│   └── GITHUB_UPLOAD_DE.md  # Upload-Anleitung
+│   ├── COGNITIVEDRIVE_ARCHITECTURE.md
+│   ├── COGNITIVEDRIVE_BUILD_FROM_ZERO.md
+│   └── assets/
 ├── examples/
-│   ├── demo_image.py        # Synthetische Demonstration
-│   └── run_video.py         # Verarbeitung eigener Videos
+│   ├── cognitive_demo.py       # cognitive baseline demo
+│   ├── demo_image.py
+│   └── run_video.py
 ├── openadas/
-│   ├── config.py            # Konfigurationsverwaltung
-│   ├── distance.py          # Distanz- und TTC-Berechnung
-│   ├── lanes.py             # Fahrspurerkennung und Geometrie
-│   ├── pipeline.py          # Zentrale Verarbeitungspipeline
-│   ├── risk.py              # Risikoklassifikation
-│   ├── tracking.py          # Centroid-Tracking
-│   ├── types.py             # Datenmodelle
-│   └── visualization.py     # Dashboard-Overlay
-├── tests/                   # Automatisierte Tests
+│   ├── cognitive/
+│   │   ├── types.py
+│   │   ├── uncertainty.py
+│   │   ├── judge.py
+│   │   ├── decision.py
+│   │   ├── memory.py
+│   │   ├── autolabel.py
+│   │   └── lifecycle.py
+│   ├── distance.py
+│   ├── lanes.py
+│   ├── pipeline.py
+│   ├── risk.py
+│   ├── tracking.py
+│   └── visualization.py
+├── tests/
+│   ├── test_cognitive.py
+│   └── ...
 ├── Dockerfile
-├── LICENSE
 ├── pyproject.toml
 └── README.md
 ```
@@ -129,237 +198,241 @@ OpenADAS-Vision-Stack/
 
 ## Installation
 
-### Voraussetzungen
-
-- Windows 10/11 oder Linux
-- Python 3.10 oder neuer
-- Git
-- Eine virtuelle Python-Umgebung wird empfohlen
-
-### Windows PowerShell
-
-```powershell
-py -m venv .venv
-Set-ExecutionPolicy -Scope Process Bypass
-.\.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-pip install -e ".[dev]"
-```
-
-### Linux
+### Linux / Ubuntu
 
 ```bash
+git clone https://github.com/hosseinAT/OpenADAS-Vision-Stack.git
+cd OpenADAS-Vision-Stack
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
 pip install -e ".[dev]"
 ```
 
----
+### Run tests
 
-## Schnellstart
-
-### 1. Tests ausführen
-
-```powershell
-pytest
-```
-
-Erwartetes Ergebnis:
-
-```text
-6 passed
-```
-
-### 2. Synthetische Demo starten
-
-```powershell
-python -m examples.demo_image
-```
-
-Ergebnis:
-
-```text
-demo_output.jpg
-```
-
-### 3. Eigenes Video verarbeiten
-
-```powershell
-python -m examples.run_video --input input.mp4 --output output.mp4
-```
-
----
-
-## Konfiguration
-
-Zentrale Parameter befinden sich in [`config/default.yaml`](config/default.yaml).
-
-```yaml
-camera:
-  focal_length_px: 900.0
-
-lane:
-  roi_top_ratio: 0.60
-  canny_low: 70
-  canny_high: 160
-  lane_width_m: 3.5
-
-risk:
-  caution_ttc_s: 6.0
-  warning_ttc_s: 4.0
-  critical_ttc_s: 2.5
-  critical_distance_m: 7.0
-```
-
-Für eine reale Kamera müssen Brennweite, Bildauflösung, Perspektive und angenommene Objektbreiten korrekt kalibriert werden.
-
----
-
-## Technische Grundlagen
-
-### Fahrspurerkennung
-
-Die Baseline nutzt klassische Computer-Vision-Verfahren:
-
-- Gauß-Filterung
-- Canny-Kantenerkennung
-- Region of Interest
-- probabilistische Hough-Transformation
-- Steigungs- und Positionsfilter
-- geometrische Bestimmung der Fahrspurmitte
-
-### Distanzschätzung
-
-Die geschätzte Distanz wird mit dem Lochkameramodell berechnet:
-
-```text
-Distanz = reale Objektbreite × Brennweite in Pixeln / Bounding-Box-Breite
-```
-
-Diese Methode ist eine Näherung. Ihre Genauigkeit hängt stark von Kamerakalibrierung, Objektorientierung und korrekter realer Objektbreite ab.
-
-### Time-to-Collision
-
-```text
-TTC = Entfernung / Annäherungsgeschwindigkeit
-```
-
-Im aktuellen Prototyp wird die relative Bewegung aus aufeinanderfolgenden Distanzschätzungen abgeleitet. Für reale Videoanwendungen muss die tatsächliche Zeitdifferenz zwischen Frames beziehungsweise die Bildrate berücksichtigt werden.
-
-### Risikostufen
-
-| Stufe | Bedeutung |
-|---|---|
-| `SAFE` | Kein unmittelbares Kollisionsrisiko erkannt |
-| `CAUTION` | Objekt nähert sich; erhöhte Aufmerksamkeit erforderlich |
-| `WARNING` | Kurze TTC; Bremsbereitschaft erforderlich |
-| `CRITICAL` | Sehr geringe Distanz oder kritische TTC |
-
----
-
-## Qualitätssicherung
-
-Das Repository enthält automatisierte Tests für:
-
-- unterschiedliche OpenCV-Ausgabeformen von `HoughLinesP`
-- Distanzschätzung
-- TTC-Berechnung
-- Risikoklassifikation
-- Tracking-ID über mehrere Frames
-
-Die Tests werden bei jedem Push und Pull Request über GitHub Actions ausgeführt.
-
-```powershell
+```bash
 pytest -v
 ```
 
----
-
-## Docker
-
-Image erstellen:
+### Run the CognitiveDrive baseline demo
 
 ```bash
-docker build -t openadas-vision-stack .
+python -m examples.cognitive_demo
 ```
 
-Demo ausführen:
-
-```bash
-docker run --rm openadas-vision-stack
-```
-
-Hinweis: Die Demo erzeugt innerhalb des Containers eine Bilddatei. Für den Zugriff auf die Ausgabe sollte ein lokaler Ordner als Volume eingebunden werden.
+The demo uses synthetic evidence intentionally. It proves the software contracts and decision/memory lifecycle before real sensor dependencies are introduced.
 
 ---
+
+## Example cognitive flow
+
+A tracked object is inconsistently classified as `wheelchair` / `bicycle`. Depth indicates that it is close and approaching.
+
+```text
+Observation
+  ↓
+Uncertainty: MEDIUM/HIGH
+  ↓
+AI Judge: mobility_device
+  ↓
+Safety label: vulnerable_road_user
+  ↓
+Decision: PREPARE_TO_STOP
+  ↓
+Store episode
+  ↓
+Retrieve similar prior experience
+  ↓
+Auto-label gate
+  ↓
+Candidate model lifecycle
+```
+
+The objective is not to claim “human-level intelligence.” The objective is to build a **measurable engineering framework for experience-driven, uncertainty-aware autonomous perception**.
+
+---
+
+## Build order — what to do and what not to do
+
+### Start with
+
+1. existing PC baseline + tests
+2. Intel RealSense RGB-D validation
+3. detector integration
+4. robust depth association
+5. multi-object tracking
+6. uncertainty / unknown handling
+7. cognitive memory retrieval
+8. gated auto-labeling
+9. candidate training + regression evaluation
+10. CARLA / shadow-mode evaluation
+11. ONNX/TensorRT + Jetson
+12. mobile demonstrator
+13. LiDAR/radar/multi-camera fusion
+
+### Do **not** start with
+
+- buying all sensors at once
+- direct control of a real road vehicle
+- automatic self-training with no validation gate
+- treating pseudo-labels as ground truth immediately
+- claiming production readiness without measured validation
+- committing large raw datasets or model binaries directly into normal Git history
+
+See the complete engineering sequence in [the build guide](docs/COGNITIVEDRIVE_BUILD_FROM_ZERO.md).
+
+---
+
+## Evaluation plan
+
+The mature project will publish measurements for:
+
+### Perception
+
+- precision / recall / F1
+- mAP
+- false negatives for vulnerable road users
+- calibration error
+
+### Tracking / geometry
+
+- ID stability
+- track fragmentation
+- distance error against measured ground truth
+
+### Cognitive layer
+
+- unknown detection quality
+- model agreement/disagreement
+- memory retrieval top-k relevance
+- auto-label acceptance precision
+
+### Continual learning
+
+- old-class recall delta
+- new-class recall delta
+- catastrophic forgetting
+- candidate-vs-active disagreement
+
+### Deployment
+
+- latency
+- FPS
+- GPU/CPU memory
+- temperature
+- power
+
+---
+
+## Hardware roadmap
+
+### Phase A — now
+
+- PC / laptop
+- Intel RealSense D456C
+
+### Phase B — after software baseline passes
+
+- NVIDIA Jetson Orin-class device
+- NVMe SSD
+
+### Phase C — mobile demonstrator
+
+- research RC/mobile platform
+- second camera
+
+### Phase D — multi-sensor research
+
+- LiDAR
+- radar
+- synchronized 360° camera setup
+
+Hardware is added only when the software has an acceptance test that requires it.
+
+---
+
+## Safety and scope
+
+This repository is intended for:
+
+- recorded data
+- simulation
+- lab experiments
+- small research demonstrators
+- autonomous-driving perception research
+
+It is **not** presented as ISO 26262-certified software, an ASIL safety mechanism, or a road-legal autonomous-driving controller.
+
 ---
 
 ## Roadmap
 
-### Phase 1 — Aktuelle Baseline
+### Milestone 1 — Cognitive software baseline
 
-- [x] Fahrspurerkennung mit OpenCV
-- [x] Fahrspurmitte und seitliche Abweichung
-- [x] Centroid-Tracking
-- [x] geometrische Distanzschätzung
-- [x] TTC- und Risikobewertung
-- [x] Dashboard-Visualisierung
-- [x] automatisierte Tests und CI
+- [x] uncertainty baseline
+- [x] dynamic-trust judge
+- [x] episodic memory baseline
+- [x] safe decision manager
+- [x] auto-label gate
+- [x] candidate lifecycle gate
+- [x] unit tests
+- [x] synthetic end-to-end demo
 
-### Phase 2 — Deep-Learning-Perception
+### Milestone 2 — Real sensor perception
 
-- [ ] YOLO-/ONNX-Objektdetektor
-- [ ] Rollstuhl- und Rollstuhlfahrererkennung
-- [ ] Deep-Learning-Spurerkennung
-- [ ] Fahrbahnsegmentierung
-- [ ] robuste Multi-Object-Tracking-Methode
+- [ ] RealSense RGB-D reader
+- [ ] measured depth validation
+- [ ] YOLO detector
+- [ ] ByteTrack/BoT-SORT
+- [ ] vulnerable-road-user classes
 
-### Phase 3 — Embedded Deployment
+### Milestone 3 — Cognitive memory & learning
 
-- [ ] ONNX-Export
-- [ ] TensorRT-FP16-Inferenz
-- [ ] Latenz- und FPS-Benchmark
-- [ ] NVIDIA-Jetson-Deployment
-- [ ] GStreamer-Kamerapipeline
+- [ ] learned embeddings
+- [ ] persistent FAISS memory
+- [ ] episode recorder
+- [ ] pseudo-label dataset writer
+- [ ] continual-learning trainer
+- [ ] forgetting benchmark
 
-### Phase 4 — Autonomous-Driving Integration
+### Milestone 4 — Validation & simulation
 
-- [ ] ROS2-Nodes und Topics
-- [ ] CARLA-Simulation
-- [ ] Kamera-Radar-Sensorfusion
-- [ ] Bird's-Eye-View
-- [ ] Shadow-Mode-Auswertung
+- [ ] CARLA scenario suite
+- [ ] sensor degradation scenarios
+- [ ] regression report generator
+- [ ] shadow-mode comparison
 
----
+### Milestone 5 — Edge & robotics
 
-## Bedeutung für autonomes Fahren
+- [ ] ONNX export
+- [ ] TensorRT FP16
+- [ ] Jetson benchmark
+- [ ] ROS2 nodes/topics
+- [ ] mobile research demonstrator
 
-Das Projekt demonstriert zentrale Entwicklungsaufgaben aus dem Bereich ADAS und autonome Systeme:
+### Milestone 6 — Advanced sensor fusion
 
-- modulare Wahrnehmungsarchitektur
-- Verarbeitung visueller Sensordaten
-- Szenenverständnis
-- geometrische Modellierung
-- Objektverfolgung
-- Sicherheits- und Risikologik
-- reproduzierbare Tests
-- Vorbereitung für Embedded-AI-Deployment
-
-### Kurzbeschreibung 
-
-> I developed a modular ADAS vision pipeline in Python and OpenCV. The current system detects lane boundaries, estimates the lateral vehicle offset, tracks supplied object detections, estimates object distance, calculates time-to-collision, and assigns safety risk levels. I structured the software so that deep-learning models, ROS2, and TensorRT deployment can be integrated in later development stages.
+- [ ] camera-LiDAR calibration
+- [ ] radar association
+- [ ] dynamic sensor trust
+- [ ] multi-view consistency
 
 ---
 
-## Autor
+## Portfolio summary
 
-**Hossein Asadi**
-
-- GitHub: [github.com/hosseinAT](https://github.com/hosseinAT)
+> **CognitiveDrive AI** is an autonomous-driving research project that extends a modular ADAS perception baseline with explicit uncertainty estimation, unknown-object handling, dynamically weighted multi-model evidence fusion, explainable risk decisions, episodic similarity memory, gated auto-labeling and a controlled candidate-model lifecycle. The architecture separates the online safety path from offline continual learning so that unvalidated self-training cannot directly replace an active perception model.
 
 ---
 
-## Lizenz
+## Author
 
-Dieses Projekt steht unter der [MIT-Lizenz](LICENSE).
+**Hossein Asadi**  
+GitHub: [github.com/hosseinAT](https://github.com/hosseinAT)
+
+---
+
+## License
+
+MIT — see [LICENSE](LICENSE).
